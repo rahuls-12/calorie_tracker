@@ -1,11 +1,12 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { supabaseServer } from "@/lib/supabase/server"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { format } from "date-fns"
 
 export async function addFoodEntry(formData: FormData) {
   try {
+    const supabase = createServerSupabaseClient()
     const foodName = formData.get("food_name") as string
     const calories = Number.parseInt(formData.get("calories") as string)
     const protein = formData.get("protein") as string
@@ -17,7 +18,7 @@ export async function addFoodEntry(formData: FormData) {
       return { success: false, message: "Food name and calories are required" }
     }
 
-    const { error } = await supabaseServer.from("food_entries").insert({
+    const { error } = await supabase.from("food_entries").insert({
       food_name: foodName,
       calories: calories,
       protein_grams: protein ? Number.parseFloat(protein) : null,
@@ -38,7 +39,8 @@ export async function addFoodEntry(formData: FormData) {
 
 export async function deleteFoodEntry(id: string) {
   try {
-    const { error } = await supabaseServer.from("food_entries").delete().eq("id", id)
+    const supabase = createServerSupabaseClient()
+    const { error } = await supabase.from("food_entries").delete().eq("id", id)
 
     if (error) throw error
 
