@@ -2,9 +2,18 @@ services:
   - type: web
     name: calorie-tracker
     env: node
+    plan: free
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
-    autoDeploy: true 
+      - key: PORT
+        value: 3000
+      - key: NEXT_PUBLIC_RENDER_EXTERNAL_URL
+        sync: false
+    autoDeploy: true
+    healthCheckPath: /
+    disk:
+      name: tmp
+      mountPath: /tmp 
