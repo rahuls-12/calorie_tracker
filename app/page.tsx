@@ -4,10 +4,20 @@ import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { createClient } from "@supabase/supabase-js"
 
+// Add export const dynamic = 'force-dynamic' to prevent pre-rendering
+export const dynamic = 'force-dynamic'
+
 // Create a single supabase client for the browser
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+  {
+    auth: {
+      flowType: 'pkce',
+      autoRefreshToken: true,
+      persistSession: true
+    }
+  }
 )
 
 export default function Home() {
