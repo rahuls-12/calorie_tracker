@@ -2,6 +2,9 @@ import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 import { format } from "date-fns"
 
+// Mark this route as dynamic so it's not pre-rendered during build
+export const dynamic = 'force-dynamic'
+
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_ANON_KEY!,
