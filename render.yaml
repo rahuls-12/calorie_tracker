@@ -10,6 +10,10 @@ services:
         value: production
       - key: PORT
         value: 3000
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
       - key: NEXT_PUBLIC_RENDER_EXTERNAL_URL
         sync: false
     autoDeploy: true
