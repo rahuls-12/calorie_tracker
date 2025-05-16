@@ -1,7 +1,7 @@
 import type React from "react"
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
-import { createClient } from "@supabase/supabase-js"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { Navbar } from "@/components/layout/navbar"
 
 export default async function ProtectedLayout({
@@ -10,17 +10,7 @@ export default async function ProtectedLayout({
   children: React.ReactNode
 }) {
   const cookieStore = cookies()
-  const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        flowType: 'pkce',
-        autoRefreshToken: true,
-        persistSession: true
-      }
-    }
-  )
+  const supabase = createServerSupabaseClient()
 
   const {
     data: { session },

@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
-import { createClient } from "@supabase/supabase-js"
 import { format } from "date-fns"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { EntryList } from "@/components/food-entry/entry-list"
 import { DailySummaryCard } from "@/components/dashboard/daily-summary"
 import { Button } from "@/components/ui/button"
@@ -10,17 +10,7 @@ import type { FoodEntry, DailySummary, DailyGoal } from "@/lib/types"
 
 export default async function Dashboard() {
   const cookieStore = cookies()
-  const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        flowType: 'pkce',
-        autoRefreshToken: true,
-        persistSession: true
-      }
-    }
-  )
+  const supabase = createServerSupabaseClient()
 
   const {
     data: { session },

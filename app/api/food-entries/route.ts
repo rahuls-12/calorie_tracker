@@ -1,24 +1,13 @@
 import { NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
 import { format } from "date-fns"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 
 // Mark this route as dynamic so it's not pre-rendered during build
 export const dynamic = 'force-dynamic'
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_ANON_KEY!,
-  {
-    auth: {
-      flowType: 'pkce',
-      autoRefreshToken: true,
-      persistSession: true
-    }
-  }
-)
-
 export async function POST(request: Request) {
   try {
+    const supabase = createServerSupabaseClient()
     const formData = await request.formData()
     const food_name = formData.get("food_name") as string
     const calories = parseInt(formData.get("calories") as string)
@@ -50,6 +39,7 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const supabase = createServerSupabaseClient()
     const id = request.url.split("/").pop()
     const { error } = await supabase.from("food_entries").delete().eq("id", id)
 
